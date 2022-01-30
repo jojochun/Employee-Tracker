@@ -324,40 +324,38 @@ function promptUser() {
 
 
 
-    function deleteEmployee() {
-        const sql = `SELECT employee.first_name, employee.last_name, employee.id
-        FROM employee`;
-        db.query(sql, (error, response) => {
-            if (error) throw error;
+    deleteEmployee = () => {
+        const employeeSql = `SELECT * FROM employee`;
 
-            const employee = response.map(({ first_name, last_name, id }) => ({
+        db.query(employeeSql, (err, result) => {
+            if (err) throw err;
+
+            const employees = result.map(({ id, first_name, last_name }) => ({
                 name: first_name + " " + last_name,
                 value: id,
             }));
 
-            inquirer
-                .prompt([
-                    {
-                        type: 'list',
-                        name: 'employeeName',
-                        message: 'Enter employee you would like to delete:',
-                        choices: employee
-                    }
-                ])
-                .then(answer => {
-                    const employee = answer.name;
+            const deleteEmployeePrompt = [
+                {
+                    type: "list",
+                    name: "deleteEmployee",
+                    message: "What is the name of the employee, you would like to delete?",
+                    choices: employees,
+                },
+            ];
 
-                    const sql = `DELETE FROM employee WHERE id = ?`;
-
-                    db.query(sql, employee, (err, result) => {
-                        if (err) throw err;
-                        console.log("Successfully Deleted!");
-
-                        showEmployees();
-                    });
+            return inquirer.prompt(deleteEmployeePrompt).then((output) => {
+                const params = [output.deleteEmployee];
+                console.log(params);
+                const sql = `DELETE FROM employee WHERE id = ?`;
+                db.query(sql, params, (err, result) => {
+                    if (err) throw err;
                 });
+                viewEmployees();
+            });
         });
     };
+
 
 };
 
