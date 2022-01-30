@@ -19,7 +19,7 @@ git@github.com:jojochun/Employee-Tracker.git
 cd employee-tracker
 ```
 
-4. To install required dependencies (npm uuid), open terminal and on command line enter:
+4. To install required dependencies, open terminal and on command line enter:
 
 ```shell
 npm install
