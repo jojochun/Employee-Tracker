@@ -1,6 +1,9 @@
 const db = require("../db/connection");
 const inquirer = require("inquirer");
 const mysql = require('mysql2')
+const cTable = require("console.table");
+
+
 
 function promptUser() {
     inquirer.prompt([
@@ -16,8 +19,9 @@ function promptUser() {
                 'Add a role',
                 'Add an employee',
                 'Update employee role',
-
-                // 'Delete a department',
+                //'Delete a department',
+                //'Delete a role',
+                'Delete an employee',
 
                 'Quit'
             ],
@@ -48,13 +52,19 @@ function promptUser() {
             if (option === 'Update employee role') {
                 updateEmployeeRole();
             }
-
             if (option === 'Delete a department') {
                 deleteDepartment();
             }
+            if (option === 'Delete a Role') {
+                deleteRole();
+            }
+            if (option === 'Delete a Employee') {
+                deleteEmployee();
+            }
 
             if (option === 'Quit') {
-                quit();
+                console.log("Goodbye, have a nice day!");
+                return process.exit(0);
             }
         });
 
@@ -301,11 +311,10 @@ function promptUser() {
                     ])
                     .then((answer) => {
 
-
                         let query = "Update employee SET role_id = ? where id = ?"
                         db.query(query, [answer.role, answer.employeeName], (error, response) => {
                             if (error) throw (error);
-                            console.log("added");
+                            console.log("Employee role has been updated.");
                             promptUser();
                         })
                     });
@@ -313,6 +322,44 @@ function promptUser() {
         });
     };
 
+
+
+    function deleteEmployee() {
+        const sql = `SELECT employee.first_name, employee.last_name, employee.id
+        FROM employee`;
+        db.query(sql, (error, response) => {
+            if (error) throw error;
+
+            const employee = response.map(({ first_name, last_name, id }) => ({
+                name: first_name + " " + last_name,
+                value: id,
+            }));
+
+            inquirer
+                .prompt([
+                    {
+                        type: 'list',
+                        name: 'employeeName',
+                        message: 'Enter employee you would like to delete:',
+                        choices: employee
+                    }
+                ])
+                .then(answer => {
+                    const employee = answer.name;
+
+                    const sql = `DELETE FROM employee WHERE id = ?`;
+
+                    db.query(sql, employee, (err, result) => {
+                        if (err) throw err;
+                        console.log("Successfully Deleted!");
+
+                        showEmployees();
+                    });
+                });
+        });
+    };
+
 };
+
 
 module.exports = promptUser;
