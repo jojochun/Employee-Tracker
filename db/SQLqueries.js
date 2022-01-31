@@ -1,11 +1,12 @@
 const db = require("../db/connection");
 const inquirer = require("inquirer");
-const mysql = require('mysql2')
+const mysql = require("mysql2")
 const cTable = require("console.table");
-
+const figlet = require("figlet");
 
 
 function promptUser() {
+
     inquirer.prompt([
         {
             type: 'list',
@@ -421,9 +422,6 @@ function promptUser() {
                 });
         });
     };
-
-
-
 };
 
 module.exports = promptUser;

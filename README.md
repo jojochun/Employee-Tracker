@@ -36,11 +36,11 @@ npm start
 
 ## Screenshot
 
-![a screenshot of my app](./assets/employee-tracker.png)
+![a screenshot of my app](./assets/employee-tracker-app.png)
 
 ## Video Walkthrough
 
-[Video walkthrough](https://drive.google.com/file/)
+[Video walkthrough](https://drive.google.com/file/d/1xrZd1Y6GfkT56jrJJaEL1mC7sjgtHcD1/view?usp=sharing)
 
 ## Built With
 
